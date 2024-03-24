@@ -25,7 +25,7 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
         to: payload.email,
         from: 'ayushkiledar10@gmail.com',
         subject: 'User Account Verification- Webapp',
-        text: "Welcome. To access your account, verify your email with this link: http://ayush-kiledar-webapp:3000/verify?token"+payload.id
+        text: "Welcome. To access your account, verify your email with this link: http://ayush-kiledar-webapp:3000/verify?token="+payload.id+"&time="+payload.time
     });
     }
     mailFunc();
