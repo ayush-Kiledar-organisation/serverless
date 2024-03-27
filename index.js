@@ -5,8 +5,8 @@ const Verify = require('./model/verification');
 const {Sequelize} = require('sequelize');
 require('dotenv').config();
 
-const API_KEY = process.env.API_KEY
-const DOMAIN = process.env.DOMAIN
+const API_KEY = process.env.API_KEY;
+const DOMAIN = process.env.DOMAIN;
 
 functions.cloudEvent('helloPubSub', cloudEvent => {
   const base64name = cloudEvent.data.message.data;
@@ -16,6 +16,7 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
     : 'World';
 
   const payload = JSON.parse(name);
+  var verification;
 
   const mailgun = new Mailgun(FormData).client({
     username: 'api',
@@ -28,11 +29,10 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
         process.env.db_database,
         process.env.db_username, 
         process.env.db_password,{
-    
-            host: process.env.db_host,
-            dialect: 'mysql',
-            logging: false
-        });
+        host: process.env.db_host,
+        dialect: 'mysql',
+        logging: false
+    });
 
       const Schema = credentials.define('verify',Verify);
 
@@ -42,27 +42,30 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
       }
 
       try{
-        credentials.sync({});
-        console.log("Table created");
+        await credentials.sync({});
       }
       catch(err){
-          console.log("Table creation error");
+          console.log("Table creation error: "+err);
       }
 
-    const verification = await Schema.create(obj);
+      verification = await Schema.create(obj);
+      console.log(verification)
   }
 
   const mailFunc = async () => {
 
-      const verification = await Schema.create(obj);
-
-      await mailgun.messages.create(DOMAIN, {
+      try{
+          await mailgun.messages.create(DOMAIN, {
           to: payload.email,
           from: 'ayushkiledar10@gmail.com',
           subject: 'User Account Verification- Webapp',
-          html: `<h1>Welcome</h1><p>To access your account, verify your email with this link: <a href="http://ayush-kiledar-webapp:3000/verify?token=${payload.id}">Click here</a></p>`
+          html: `<h1>Welcome</h1><p>To access your account, verify your email with this link: <a href="http://ayush-kiledar-webapp.me:3000/verify?token=${payload.id}">Click here</a></p>`
       });
+      }
+      catch(err){
+        console.log("Mailing error: "+err);
+      }
     }
-    mailFunc();
     tracking();
+    mailFunc();
 });
