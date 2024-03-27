@@ -1,6 +1,5 @@
 const functions = require('@google-cloud/functions-framework');
 const mailgun = require('mailgun-js');
-const Mailgen = require('mailgen');
 const Verify = require('./model/verification');
 const {Sequelize} = require('sequelize');
 require('dotenv').config();
