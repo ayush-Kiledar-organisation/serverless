@@ -1,6 +1,5 @@
 const functions = require('@google-cloud/functions-framework');
 const mailgun = require('mailgun-js');
-const Mailgen = require('mailgen');
 const Verify = require('./model/verification');
 const {Sequelize} = require('sequelize');
 require('dotenv').config();
@@ -58,7 +57,7 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
           to: payload.email,
           from: 'ayushkiledar10@gmail.com',
           subject: 'User Account Verification- Webapp',
-          html: `Welcome. To access your account, verify your email with this link: http://ayush-kiledar-webapp.me:3000/verify?token=${payload.id}. This link will expire in 2 minutes. We hope you enjoy our services.`
+          html: `Welcome. To access your account, verify your email with this link: https://ayush-kiledar-webapp.me/verify?token=${payload.id}. This link will expire in 2 minutes. We hope you enjoy our services.`
       });
       }
       catch(err){
