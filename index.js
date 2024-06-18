@@ -57,7 +57,7 @@ functions.cloudEvent('helloPubSub', cloudEvent => {
           to: payload.email,
           from: 'ayushkiledar10@gmail.com',
           subject: 'User Account Verification- Webapp',
-          html: `Welcome. To access your account, verify your email with this link: https://ayush-kiledar-webapp.me/verify?token=${payload.id}. This link will expire in 2 minutes. We hope you enjoy our services.`
+          html: `Welcome. To access your account, verify your email with this link: ${payload.url}?token=${payload.id}. This link will expire in 2 minutes. We hope you enjoy our services.`
       });
       }
       catch(err){
